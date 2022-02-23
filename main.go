@@ -526,6 +526,7 @@ func (bob *Bob) Round1Stage4(prevTx *wire.MsgTx) *wire.MsgTx {
 	tx := wire.NewMsgTx(2)
 
 	tx.AddTxIn(wire.NewTxIn(wire.NewOutPoint(&prevTxHash, 0), nil, nil))
+	tx.TxIn[0].Sequence = 144
 	tx.AddTxOut(wire.NewTxOut(6200, bob.p2BobScript))
 
 	txSigHashes := txscript.NewTxSigHashes(tx)
@@ -535,8 +536,7 @@ func (bob *Bob) Round1Stage4(prevTx *wire.MsgTx) *wire.MsgTx {
 		log.Fatalln(err)
 	}
 
-	tx.TxIn[0].Sequence = 144
-	tx.TxIn[0].Witness = append(bobTxWitness0, []byte{0}, bob.script0)
+	tx.TxIn[0].Witness = append(bobTxWitness0, nil, bob.script0)
 
 	return tx
 }
